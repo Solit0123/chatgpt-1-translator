@@ -13,7 +13,7 @@ export default function Home() {
 
   async function onSubmit(event) {
     event.preventDefault();
-    alert(`this is the data from text: ${textInput} && ${lng1.value} && ${lng2.value}`)
+    // alert(`this is the data from text: ${textInput} && ${lng1.value} && ${lng2.value}`)
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
