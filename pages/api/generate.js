@@ -15,8 +15,11 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const textToTranslate = req.body.text || '';
+  const one = req.body.one  || '';
+  const two = req.body.two  || '';
+
+  if (textToTranslate.trim().length === 0) {
     res.status(400).json({
       error: {
         message: "Please enter a valid animal",
@@ -24,14 +27,33 @@ export default async function (req, res) {
     });
     return;
   }
+  
+  // if (!one && !two) {
+  //   res.status(400).json({
+  //     error: {
+  //       message: `Please enter at least one valid language: ${one} && ${two}`,
+  //     }
+  //   });
+  //   return;
+  // };
+
+
 
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal),
+      prompt: generatePrompt(textToTranslate, one),
       temperature: 0.6,
     });
-    res.status(200).json({ result: completion.data.choices[0].text });
+
+    const completion2 = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: generatePrompt2(textToTranslate, two),
+      temperature: 0.6,
+    });
+
+
+    res.status(200).json({ result: completion.data.choices[0].text , result2: completion2.data.choices[0].text });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -41,22 +63,29 @@ export default async function (req, res) {
       console.error(`Error with OpenAI API request: ${error.message}`);
       res.status(500).json({
         error: {
-          message: 'An error occurred during your request.',
+          message: `An error occurred during your request.${one} && ${two}`,
         }
       });
     }
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
+function generatePrompt(texttotranslate, one) {
+  // const capitalizedText =
+  // textToTranslate[0].toUpperCase() + animal.slice(1).toLowerCase();
 
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
+  return `Translate the following text to ${one}. Write it in a way that a 3rd greater can understant it.
+
+  Text:${texttotranslate}
+`;
+}
+
+function generatePrompt2(texttotranslate, two) {
+  // const capitalizedText =
+  // textToTranslate[0].toUpperCase() + animal.slice(1).toLowerCase();
+
+  return `Translate the following text to ${two}. Write it in a way that a 3rd greater can understant it.
+
+  Text:${texttotranslate}
+`;
 }
