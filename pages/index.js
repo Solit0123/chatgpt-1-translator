@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./index.module.css";
 import Select from 'react-select';
 
@@ -60,7 +60,7 @@ export default function Home() {
     {value: 'Chinese', label: 'Chinese'},
     {value: 'Tagalog', label: 'Tagalog'},
     {value: 'Korean', label: 'Korean'},
-    {value: 'ietnamese', label: 'ietnamese'},
+    {value: 'Vietnamese', label: 'Vietnamese'},
     { value: 'Russian', label: 'Russian' },
 
   ]
