@@ -5,8 +5,8 @@ export default function MyApp({ Component, pageProps }) {
     <>
       <Component {...pageProps} />
       <Script
+      id="HotJarAnalytics"
        strategy="afterInteractive" 
-       src="https://example.com/script.js" 
        dangerouslySetInnerHTML={{
                                    __html:
      `
